@@ -1,4 +1,4 @@
-package cn.bupt.airsys.dao;
+package cn.bupt.airsys.utils;
 
 
 import cn.bupt.airsys.Configure;
@@ -46,7 +46,7 @@ public class DatabaseManager {
         stm.close();
     }
 
-    public static ResultSet all(String sql) throws SQLException {
+    public static ResultSet query(String sql) throws SQLException {
         Statement stm = con.createStatement();
         ResultSet rs = stm.executeQuery(sql);
         stm.close();

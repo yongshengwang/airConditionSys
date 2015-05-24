@@ -1,4 +1,4 @@
-package cn.bupt.airsys.net;
+package cn.bupt.airsys.service;
 
 import cn.bupt.airsys.exception.ServerException;
 
