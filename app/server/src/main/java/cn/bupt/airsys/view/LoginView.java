@@ -23,6 +23,7 @@ public class LoginView extends JDialog {
 
     private void initView() {
         this.setTitle("Login");
+        this.setSize(300, 150);
         final JLabel userLabel = new JLabel("username");
         final JTextField userText = new JTextField(20);
         final JLabel passwdLabel = new JLabel("password");
@@ -86,18 +87,4 @@ public class LoginView extends JDialog {
         this.controller = controller;
     }
 
-    /* TEST
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                LoginView view = new LoginView();
-                AuthController controller = new AuthController(view);
-                view.setController(controller);
-                view.setSize(300, 150);
-                view.setVisible(true);
-            }
-        });
-    }
-    */
 }

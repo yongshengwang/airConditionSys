@@ -5,13 +5,21 @@ package cn.bupt.airsys;
  */
 public interface Configure {
     /** UDP port configure */
-    static public int DEFAULT_PORT = 8888;
+    public static final int DEFAULT_PORT = 8888;
 
     /** JDBC configure */
-    static public String DBMS= "mysql";
-    static public String DB_HOST= "10.104.252.161";
-    static public String DB_DATABASE = "airsys";
-    static public String DB_DSN = "jdbc:" + DBMS + "://" + DB_HOST + "/" + DB_DATABASE;
-    static public String DB_USER = "also";
-    static public String DB_PASSWD = "123";
+    public static final String DBMS = "mysql";
+    public static final String DB_HOST = "10.104.252.161";
+    public static final String DB_DATABASE = "airsys";
+    public static final String DB_DSN = "jdbc:" + DBMS + "://" + DB_HOST + "/" + DB_DATABASE;
+    public static final String DB_USER = "also";
+    public static final String DB_PASSWD = "123";
+
+    public static final String[] POWER = {"small", "middle", "high"};
+
+    public static final String[] WORKMODE = {"cold", "hot"};
+    public static final float[] TEMPERATURE_RANGE = {18.0f, 25.0f, 25.0f, 30.0f};
+    public static final String DEFAULT_WORKMODE = WORKMODE[0];
+    public static final float DEFAULT_INITTEMP = 23.0f;
+
 }
