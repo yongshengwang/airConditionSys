@@ -4,12 +4,14 @@ package cn.bupt.airsys.model;
  * Created by ALSO on 2015/5/26.
  */
 public class Slave {
+
     private String id;
+    ;
+    private Status currStatus;
     private String ipAddr;
     private float currtentTemp;
     private float targetTemp;
     private String power;
-
     public Slave(String id, String ipAddr) {
         this.id = id;
         this.ipAddr = ipAddr;
@@ -55,8 +57,27 @@ public class Slave {
         power = power;
     }
 
+    public String getCurrStatus() {
+        if (currStatus == Status.PENDING) {
+            return "PENDING";
+        }
+        return "WORKING";
+    }
+
+    public void setCurrStatus(String currStatus) {
+        if (currStatus.equals("PEDING")) {
+            this.currStatus = Status.PENDING;
+        } else {
+            this.currStatus = Status.WORKING;
+        }
+    }
+
     public String toString() {
         return "Slave #" + id + "ip: " + ipAddr + " current temperature: " + currtentTemp + " power: " +
                 targetTemp + " power: " + power;
+    }
+
+    private enum Status {
+        PENDING, WORKING
     }
 }

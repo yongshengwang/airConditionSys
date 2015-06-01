@@ -22,11 +22,11 @@ public class LoginView extends JDialog {
     }
 
     private void initView() {
-        this.setTitle("Login");
-        this.setSize(300, 150);
-        final JLabel userLabel = new JLabel("username");
+        this.setTitle("登录呀");
+        this.setSize(300, 225);
+        final JLabel userLabel = new JLabel("用户名");
         final JTextField userText = new JTextField(20);
-        final JLabel passwdLabel = new JLabel("password");
+        final JLabel passwdLabel = new JLabel("密码");
         final JTextField passwdText = new JPasswordField(20);
         passwdText.addKeyListener(new KeyAdapter() {
             @Override
@@ -36,7 +36,7 @@ public class LoginView extends JDialog {
                 }
             }
         });
-        JButton loginButton = new JButton("Login");
+        JButton loginButton = new JButton("登录");
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
