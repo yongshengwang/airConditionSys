@@ -10,40 +10,41 @@ import java.text.MessageFormat;
  * Created by ALSO on 2015/6/1.
  */
 public class SysConfPanel extends BasePanel {
+    public static final int COLD = 1;
+    public static final int HOT = 2;
     private static final String BORDER = "控制面板";
     private static final String[] WORKMODE = {"制冷", "制热"};
     private static final String[] BOOT = {"开机", "关机"};
     private static final String TEMPERATURE_FORMAT = "当前设置温度: {0} ℃ ";
-
     /**
      * power on button
      */
-    private JButton onButton;
+    public JButton onButton;
 
     /**
      * power off button
      */
-    private JButton offButton;
+    public JButton offButton;
 
     /**
      * button to change sys to hot mode
      */
-    private JButton hotButton;
+    public JButton hotButton;
 
     /**
      * button to change sys to cold mode
      */
-    private JButton coldButton;
+    public JButton coldButton;
 
     /**
      * slider of init temperature
      */
-    private JSlider initHotTempSlider;
+    public JSlider initHotTempSlider;
 
     /**
      * slider of init temperature
      */
-    private JSlider initColdTempSlider;
+    public JSlider initColdTempSlider;
 
     /**
      * display current init temp
@@ -51,20 +52,8 @@ public class SysConfPanel extends BasePanel {
     private JLabel currentSetupTemp;
 
     public SysConfPanel() {
+        super();
         iniView();
-        // TODO
-    }
-
-    public static void main(String args[]) {
-        try {
-            org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.launchBeautyEyeLNF();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        JFrame f = new JFrame();
-        f.add(new SysConfPanel());
-        f.setSize(500, 400);
-        f.setVisible(true);
     }
 
     private void iniView() {
@@ -117,12 +106,34 @@ public class SysConfPanel extends BasePanel {
         p.setLayout(new FlowLayout(FlowLayout.LEFT));
         currentSetupTemp = new JLabel();
         add(currentSetupTemp);
-        p.add(createToolTip());
-        add(p);
-
         MessageFormat tempLabelFormat = new MessageFormat(TEMPERATURE_FORMAT);
         Object[] a = new Object[]{initColdTempSlider.getValue()};
         String temp = tempLabelFormat.format(a);
         currentSetupTemp.setText(temp);
     }
+
+    public int updateTempLabel() {
+        MessageFormat tempLabelFormat = new MessageFormat(TEMPERATURE_FORMAT);
+        int temp;
+        if (initColdTempSlider.isEnabled() == false) {
+            temp = initHotTempSlider.getValue();
+        } else {
+            temp = initColdTempSlider.getValue();
+        }
+        Object[] a = new Object[]{temp};
+        String _temp = tempLabelFormat.format(a);
+        currentSetupTemp.setText(_temp);
+        return temp;
+    }
+
+    public void changeTempSlider(int mode) {
+        if (mode == COLD && initColdTempSlider.isEnabled() == false) {
+            initColdTempSlider.setEnabled(true);
+            initHotTempSlider.setEnabled(false);
+        } else if (mode == HOT && initHotTempSlider.isEnabled() == false) {
+            initHotTempSlider.setEnabled(true);
+            initColdTempSlider.setEnabled(false);
+        }
+    }
+
 }

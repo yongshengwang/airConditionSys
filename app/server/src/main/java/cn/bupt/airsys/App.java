@@ -1,8 +1,7 @@
 package cn.bupt.airsys;
 
-import cn.bupt.airsys.controller.AuthController;
 import cn.bupt.airsys.controller.ServerController;
-import cn.bupt.airsys.view.LoginView;
+import cn.bupt.airsys.model.SysProperty;
 import cn.bupt.airsys.view.MainWindow;
 
 import javax.swing.*;
@@ -13,26 +12,20 @@ import javax.swing.*;
 public class App {
     private ServerController serverController;
     private MainWindow mainWindow;
+    private SysProperty sysProperty;
 
-    public App() {
-        try {
-            org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.launchBeautyEyeLNF();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                LoginView view = new LoginView();
-                AuthController controller = new AuthController(view);
-                view.setController(controller);
-                view.setVisible(true);
-            }
-        });
+    public App() throws Exception {
+        org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.launchBeautyEyeLNF();
+        UIManager.put("RootPane.setupButtonVisible", false);
+        mainWindow = new MainWindow();
     }
 
     public static void main(String args[]) {
-        new App();
+        try {
+            new App();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

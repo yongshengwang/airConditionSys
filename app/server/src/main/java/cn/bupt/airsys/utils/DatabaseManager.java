@@ -20,6 +20,7 @@ public class DatabaseManager {
             try {
                 // Load Driver
                 Class.forName(DRIVER);
+                System.out.println(Configure.DB_DSN);
                 con = DriverManager.getConnection(Configure.DB_DSN, Configure.DB_USER, Configure.DB_PASSWD);
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
@@ -40,17 +41,16 @@ public class DatabaseManager {
        }
     }
 
+    public static ResultSet query(String sql) throws SQLException {
+        Statement stm = con.createStatement();
+        ResultSet rs = stm.executeQuery(sql);
+        return rs;
+    }
+
     public void insert(String sql) throws SQLException {
         Statement stm = con.createStatement();
         stm.executeUpdate(sql);
         stm.close();
-    }
-
-    public static ResultSet query(String sql) throws SQLException {
-        Statement stm = con.createStatement();
-        ResultSet rs = stm.executeQuery(sql);
-        stm.close();
-        return rs;
     }
 
 }

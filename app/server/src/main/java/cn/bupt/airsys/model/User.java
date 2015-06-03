@@ -13,18 +13,27 @@ public class User {
     private String username;
     private String role;
     /** TODO other meta */
-    private static User singleton;
 
-    public synchronized static User getInstence(String username) {
-        if(singleton == null) {
-            singleton = new User(username);
-        }
-        return singleton;
-    }
-
-    private User(String username) {
+    public User(String username) {
         this.username = username;
         this.role = getRole(username);
+    }
+
+    public static boolean checkPasswd(String name, String passwd, boolean md5) {
+        if (md5 == false) {
+            passwd = Utility.MD5(passwd);
+        }
+        DatabaseManager db = DatabaseManager.getInstance();
+        String sql = "select password from user where username = '" + name + "';";
+        try {
+            ResultSet rs = db.query(sql);
+            while (rs.next()) {
+                return passwd.equals(rs.getString("password"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public void update(String username) {
@@ -41,43 +50,30 @@ public class User {
         return username;
     }
 
-    public String getRole() {
-        return role;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getRole(String username) {
-        DatabaseManager db = DatabaseManager.getInstance();
-        String sql = "select * from user where username = '"  + username + "';";
-        try {
-            ResultSet rs = db.query(sql);
-            return rs.getString("role");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public String getRole() {
+        return role;
     }
 
     public void setRole(String role) {
         this.role = role;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public static boolean checkPasswd(String name, String passwd, boolean md5) {
-        if(md5 == false) {
-            passwd = Utility.MD5(passwd);
-        }
+    public String getRole(String username) {
         DatabaseManager db = DatabaseManager.getInstance();
-        String sql = "select password from user where username = '"  + name + "';";
+        String sql = "select * from user where username = '" + username + "';";
         try {
             ResultSet rs = db.query(sql);
-            return passwd.equals(rs.getString("password"));
+            rs.next();
+            System.out.println(rs.getString("type"));
+            return rs.getString("type");
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return null;
     }
 
     public void createUser(String username, String passwd, boolean passMD5) {

@@ -1,14 +1,10 @@
 package cn.bupt.airsys.model;
 
-import cn.bupt.airsys.Configure;
-import cn.bupt.airsys.exception.ServerException;
-
-import java.util.LinkedHashMap;
-
 /**
  * Created by ALSO on 2015/5/26.
  */
 public class Server {
+    /*
     private String workMode;
     private float initTemp;
     private LinkedHashMap<String, Slave> slaves;
@@ -93,4 +89,5 @@ public class Server {
             slaves.put(ip, s);
         }
     }
+    */
 }

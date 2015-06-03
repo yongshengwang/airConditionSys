@@ -17,6 +17,8 @@ public class MonitorPanel extends BasePanel {
 
     private JScrollPane scrollPane;
 
+    private TempGraphPanel tempGraph;
+
     private JTable tableView;
 
     private JSplitPane splitPane;
@@ -34,18 +36,17 @@ public class MonitorPanel extends BasePanel {
     }
 
     private void initView() {
+        setBorder(BorderFactory.createTitledBorder(BORDER));
         createTable();
-        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scrollPane, scrollPane);
+        tempGraph = new TempGraphPanel();
+        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scrollPane, tempGraph);
         splitPane.setContinuousLayout(true);
-        splitPane.setDividerLocation(100);
+        splitPane.setDividerLocation(200);
         add(splitPane, BorderLayout.CENTER);
     }
 
     private void createTable() {
-        final String[] names = {
-                "id", "当前温度", "目标温度", "功率", "ip"
-        };
-
+        //final String[] names = { "id", "当前温度", "目标温度", "功率", "ip地址" };
         tableView = new JTable(dataModel);
         scrollPane = new JScrollPane(tableView);
         try {
@@ -60,5 +61,4 @@ public class MonitorPanel extends BasePanel {
         }
         tableView.setRowHeight(INITIAL_ROWHEIGHT);
     }
-
 }
