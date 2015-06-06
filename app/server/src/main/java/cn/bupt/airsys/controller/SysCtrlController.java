@@ -9,6 +9,8 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 /**
  * Created by ALSO on 2015/6/2.
@@ -56,6 +58,16 @@ public class SysCtrlController {
                             // TODO power off
                         }
                     });
+                }
+            }
+        });
+
+        view.communiFreqBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+//                System.out.println(((JComboBox)e.getSource()).getSelectedItem());
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    System.out.println(e.getItem());
                 }
             }
         });

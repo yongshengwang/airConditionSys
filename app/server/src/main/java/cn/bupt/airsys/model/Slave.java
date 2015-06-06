@@ -5,13 +5,16 @@ package cn.bupt.airsys.model;
  */
 public class Slave {
 
+    public static final int SML_POWER = 1;
+    public static final int MID_POWER = 2;
+    public static final int HIGHT_POWER = 3;
+
     private String id;
-    ;
     private Status currStatus;
     private String ipAddr;
     private float currtentTemp;
     private float targetTemp;
-    private String power;
+    private int power;
     public Slave(String id, String ipAddr) {
         this.id = id;
         this.ipAddr = ipAddr;
@@ -49,12 +52,26 @@ public class Slave {
         this.targetTemp = targetTemp;
     }
 
-    public String getPower() {
+    public int getPower() {
         return power;
     }
 
-    public void setPower(String power) {
-        power = power;
+
+    public void setPower(int power) {
+        if (power > 0 && power < 4) {
+            switch (power - this.power) {
+                case -1:
+                    this.power = SML_POWER;
+                    break;
+
+                case 1:
+                    this.power = HIGHT_POWER;
+                    break;
+
+                default:
+                    break;
+            }
+        }
     }
 
     public String getCurrStatus() {

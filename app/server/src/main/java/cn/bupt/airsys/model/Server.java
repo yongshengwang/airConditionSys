@@ -1,76 +1,91 @@
 package cn.bupt.airsys.model;
 
+import cn.bupt.airsys.Configure;
+import cn.bupt.airsys.exception.ServerException;
+import cn.bupt.airsys.service.ServerDaemon;
+import cn.bupt.airsys.service.ServerListener;
+import cn.bupt.airsys.utils.Utility;
+
+import java.util.LinkedHashMap;
+
 /**
  * Created by ALSO on 2015/5/26.
  */
 public class Server {
-    /*
-    private String workMode;
-    private float initTemp;
     private LinkedHashMap<String, Slave> slaves;
 
     public Server() {
-        this(Configure.DEFAULT_WORKMODE, Configure.DEFAULT_INITTEMP);
+        this(SysProperty.COLD, 23.0f);
     }
 
-    public Server(String workMode, float initTemp) {
+    public Server(int workMode, float initTemp) {
         slaves = new LinkedHashMap<String, Slave>();
-        this.workMode = workMode;
-        this.initTemp = initTemp;
+        SysProperty sys = SysProperty.getInstance();
+        sys.setInitTemp(initTemp);
+        sys.setWorkMode(workMode);
+
     }
 
-    public void updateSlaveTargetTemperature(String slaveIp, float temperature) throws ServerException {
-        if ((workMode == Configure.WORKMODE[0] && temperature > Configure.TEMPERATURE_RANGE[0] && temperature < Configure.TEMPERATURE_RANGE[1])
-                | (workMode == Configure.WORKMODE[1] && temperature > Configure.TEMPERATURE_RANGE[2] && temperature < Configure.TEMPERATURE_RANGE[3])) {
-            Slave s = slaves.get(slaveIp);
-            if (s != null) {
-                s.setTargetTemp(temperature);
-            } else {
-                throw new ServerException("No slave found.");
-            }
-        }
+    public void bootUp() {
+        SysProperty.getInstance().bootUp();
+        initNet();
     }
 
-    public void updateSlaveTemperature(String slaveIp, float currentTemp) throws ServerException {
-        if ((workMode == Configure.WORKMODE[0] && currentTemp > Configure.TEMPERATURE_RANGE[0] && currentTemp < Configure.TEMPERATURE_RANGE[1])
-                | (workMode == Configure.WORKMODE[1] && currentTemp > Configure.TEMPERATURE_RANGE[2] && currentTemp < Configure.TEMPERATURE_RANGE[3])) {
-            Slave s = slaves.get(slaveIp);
-            if (s != null) {
-                s.setTargetTemp(currentTemp);
-            } else {
-                throw new ServerException("No slave found.");
-            }
-        }
-    }
+    public void initNet() {
+        Thread serv = new Thread(new ServerDaemon(Configure.DEFAULT_PORT, new ServerListener() {
+            @Override
+            public void onReceive(String inetAddr, byte[] requestData) {
+                int type = requestData[0];
+                switch (type) {
+                    case 2:
+                        if (!slaves.containsValue(inetAddr)) {
+                            Slave s = new Slave(String.valueOf(requestData[1]), inetAddr);
+                        }
+                        break;
 
-    public void updateSlavePower(String slaveIp, String power) throws ServerException {
-        for (String p : Configure.POWER) {
-            if (p.equals(power)) {
-                Slave s = slaves.get(slaveIp);
-                if (s != null) {
-                    s.setPower(power);
-                } else {
-                    throw new ServerException("No slave found.");
+                    case 3:
+                        slaves.remove(inetAddr);
+                        break;
+
+                    case 4:
+                        if (slaves.containsValue(inetAddr)) {
+                            byte data[] = new byte[4];
+                            for (int i = 0; i < 4; i++) {
+                                data[i] = requestData[i + 1];
+                            }
+                            float temp = Utility.byte2float(data);
+                            slaves.get(inetAddr).setCurrtentTemp(temp);
+                        }
+                        break;
+
+                    case 5:
+                        if (slaves.containsValue(inetAddr)) {
+                            byte data[] = new byte[4];
+                            for (int i = 0; i < 4; i++) {
+                                data[i] = requestData[i + 1];
+                            }
+                            float temp = Utility.byte2float(data);
+                            int power = requestData[5];
+                            System.out.println("Slave: " + inetAddr + " req temp: " + temp + " req power: " + power);
+                            Slave s = slaves.get(inetAddr);
+                            s.setPower(power);
+                            if ((SysProperty.getInstance().getWorkMode() == SysProperty.COLD && temp <= 25.0f && temp >= 18.0f) ||
+                                    (SysProperty.getInstance().getWorkMode() == SysProperty.HOT && temp >= 25.0f && temp <= 30.0f)) {
+                                s.setTargetTemp(temp);
+                            }
+                        }
+                        break;
+
+                    default:
+                        break;
                 }
-                break;
             }
-        }
-    }
 
-    public String getWorkMode() {
-        return workMode;
-    }
+            @Override
+            public void onException(ServerException e) {
 
-    public void setWorkMode(String workMode) {
-        this.workMode = workMode;
-    }
-
-    public float getInitTemp() {
-        return initTemp;
-    }
-
-    public void setInitTemp(float initTemp) {
-        this.initTemp = initTemp;
+            }
+        }));
     }
 
     public String getSlave(String ip) {
@@ -89,5 +104,4 @@ public class Server {
             slaves.put(ip, s);
         }
     }
-    */
 }

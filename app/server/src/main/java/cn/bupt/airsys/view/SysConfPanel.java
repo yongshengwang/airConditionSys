@@ -12,6 +12,9 @@ import java.text.MessageFormat;
 public class SysConfPanel extends BasePanel {
     public static final int COLD = 1;
     public static final int HOT = 2;
+    public static final String HIGH_FREQ = "快-更新频率";
+    public static final String MID_FREQ = "一般-更新频率";
+    public static final String LOW_FREQ = "慢-更新频率";
     private static final String BORDER = "控制面板";
     private static final String[] WORKMODE = {"制冷", "制热"};
     private static final String[] BOOT = {"开机", "关机"};
@@ -35,6 +38,11 @@ public class SysConfPanel extends BasePanel {
      * button to change sys to cold mode
      */
     public JButton coldButton;
+
+    /**
+     * update frequence comboBox
+     */
+    public JComboBox communiFreqBox;
 
     /**
      * slider of init temperature
@@ -65,8 +73,13 @@ public class SysConfPanel extends BasePanel {
         onButton = new JButton(BOOT[0]);
         offButton = new JButton(BOOT[1]);
         onButton.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.green));
+        communiFreqBox = new JComboBox();
+        communiFreqBox.addItem(MID_FREQ);
+        communiFreqBox.addItem(HIGH_FREQ);
+        communiFreqBox.addItem(LOW_FREQ);
         p.add(onButton);
         p.add(offButton);
+        p.add(communiFreqBox);
         add(p);
 
         /* add work mode button and init temperature sliders */

@@ -11,8 +11,15 @@ import javax.swing.table.AbstractTableModel;
  * Created by ALSO on 2015/6/1.
  */
 public class SlaveListTableModel extends AbstractTableModel {
-    private ListModel<Slave> listModel = new DefaultListModel<Slave>();
+    private final String[] columnNames = {
+            "ID",
+            "温度",
+            "目标",
+            "功率",
+            "IP"
+    };
     ;
+    private ListModel<Slave> listModel = new DefaultListModel<Slave>();
     private ListModelChangeListener listModelChangeListener = new ListModelChangeListener();
 
     public final void setListModel(ListModel<Slave> listModel) {
@@ -68,6 +75,10 @@ public class SlaveListTableModel extends AbstractTableModel {
                 break;
         }
         return columnValue;
+    }
+
+    public String getColumnName(int column) {
+        return columnNames[column];
     }
 
     private enum Columns {

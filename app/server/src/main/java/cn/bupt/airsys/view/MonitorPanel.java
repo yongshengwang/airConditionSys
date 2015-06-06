@@ -46,7 +46,7 @@ public class MonitorPanel extends BasePanel {
     }
 
     private void createTable() {
-        //final String[] names = { "id", "当前温度", "目标温度", "功率", "ip地址" };
+        dataModel = new SlaveListTableModel();
         tableView = new JTable(dataModel);
         scrollPane = new JScrollPane(tableView);
         try {

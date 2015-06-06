@@ -24,16 +24,16 @@ public class Utility {
     public static byte[]  packetCompose(int type, Object param1, Object param2) throws MsgException {
         byte[] msg = new byte[8];
         switch(type) {
-            case 5:
-                msg[0] = (byte) (5 & 0xff);
+            case 6:
+                msg[0] = (byte) (6 & 0xff);
                 msg[1] = (byte) ((Integer) param1 & 0xff);
                 byte[] tmp = ByteBuffer.allocate(4).putFloat((Float) param2).array();
                 for(int i = 2; i < 6; i++) {
                     msg[i] = tmp[i-2];
                 }
                 break;
-            case 6:
-                msg[0] = (byte) (5 & 0xff);
+            case 7:
+                msg[0] = (byte) (7 & 0xff);
                 byte[] _tmp = ByteBuffer.allocate(4).putFloat((Float) param2).array();
                 for(int i = 1; i < 5; i++) {
                     msg[i] = _tmp[i-1];
@@ -46,8 +46,15 @@ public class Utility {
         return msg;
     }
 
-    public static String packetParse(byte[] packet) {
-        // TODO
-        return null;
+    public static float byte2float(byte[] bytes) {
+        int asInt = (bytes[0] & 0xFF)
+                | ((bytes[1] & 0xFF) << 8)
+                | ((bytes[2] & 0xFF) << 16)
+                | ((bytes[3] & 0xFF) << 24);
+        return Float.intBitsToFloat(asInt);
+    }
+
+    public static void main(String args[]) {
+        return;
     }
 }
