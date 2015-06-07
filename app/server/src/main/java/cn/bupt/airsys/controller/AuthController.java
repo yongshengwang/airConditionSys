@@ -11,9 +11,9 @@ import java.awt.event.ActionEvent;
  */
 public class AuthController {
     private LoginDialog view;
-    private AuthListener listner;
+    private AbstractListener listner;
 
-    public AuthController(LoginDialog loginDialog, AuthListener listner) {
+    public AuthController(LoginDialog loginDialog, AbstractListener listner) {
         this.view = loginDialog;
         this.listner = listner;
         setUpEvent();
@@ -40,11 +40,14 @@ public class AuthController {
                 }
             }
         });
+
         view.getPasswdText().addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 boolean ret = auth(view.getUserText().getText().trim(), view.getPasswdText().getText().trim());
                 if (ret) {
+                    User user = new User(view.getUserText().getText().trim());
+                    listner.onComplete(user);
                     view.dispose();
                 } else {
                     view.shake();

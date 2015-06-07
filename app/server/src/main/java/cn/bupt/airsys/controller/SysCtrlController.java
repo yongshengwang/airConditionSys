@@ -1,5 +1,6 @@
 package cn.bupt.airsys.controller;
 
+import cn.bupt.airsys.model.Server;
 import cn.bupt.airsys.model.SysProperty;
 import cn.bupt.airsys.model.User;
 import cn.bupt.airsys.view.LoginDialog;
@@ -19,10 +20,12 @@ public class SysCtrlController {
     private SysConfPanel view;
     private SysProperty model;
     private User admin;
+    private AbstractListener listener;
 
-    public SysCtrlController(SysConfPanel view, SysProperty model) {
+    public SysCtrlController(SysConfPanel view, SysProperty model, AbstractListener listener) {
         this.view = view;
         this.model = model;
+        this.listener = listener;
         setUpViewEvents();
     }
 
@@ -34,10 +37,11 @@ public class SysCtrlController {
                 loginDialog.setVisible(true);
                 loginDialog.setLocationRelativeTo(view.getParent());
                 loginDialog.setAlwaysOnTop(true);
-                AuthController authController = new AuthController(loginDialog, new AuthListener() {
+                AuthController authController = new AuthController(loginDialog, new AbstractListener() {
                     @Override
-                    public void onComplete(User user) {
-                        // TODO System boot up
+                    public void onComplete(Object user) {
+                        view.bootupInit();
+                        listener.onComplete(null);
                     }
                 });
             }
@@ -52,9 +56,9 @@ public class SysCtrlController {
                     loginDialog.setVisible(true);
                     loginDialog.setLocationRelativeTo(view.getParent());
                     loginDialog.setAlwaysOnTop(true);
-                    AuthController authController = new AuthController(loginDialog, new AuthListener() {
+                    AuthController authController = new AuthController(loginDialog, new AbstractListener() {
                         @Override
-                        public void onComplete(User user) {
+                        public void onComplete(Object user) {
                             // TODO power off
                         }
                     });

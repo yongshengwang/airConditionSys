@@ -3,6 +3,8 @@ package cn.bupt.airsys.model.table;
 import cn.bupt.airsys.model.Slave;
 
 import javax.swing.*;
+import javax.swing.text.html.HTMLDocument;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -30,4 +32,30 @@ public class ListAdapterListModel extends AbstractListModel {
         return slaveList.get(index);
     }
 
+    public void addSlave(Slave slave) {
+        slaveList.add(slave);
+    }
+
+    public void changeSlave(Slave slave) {
+        Iterator<Slave> it = slaveList.iterator();
+        while(it.hasNext()) {
+            if(it.next().getIpAddr().equals(slave.getIpAddr())) {
+                it.remove();
+                slaveList.add(slave);
+            }
+        }
+    }
+
+    public void removeSlave(int index) {
+        slaveList.remove(index);
+    }
+
+    public void removeSlave(Slave slave) {
+         Iterator<Slave> it = slaveList.iterator();
+        while(it.hasNext()) {
+            if(it.next().getIpAddr().equals(slave.getIpAddr())) {
+                it.remove();
+            }
+        }
+    }
 }

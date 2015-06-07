@@ -123,6 +123,21 @@ public class SysConfPanel extends BasePanel {
         Object[] a = new Object[]{initColdTempSlider.getValue()};
         String temp = tempLabelFormat.format(a);
         currentSetupTemp.setText(temp);
+
+        communiFreqBox.setEnabled(false);
+        offButton.setEnabled(false);
+        coldButton.setEnabled(false);
+        hotButton.setEnabled(false);
+        initColdTempSlider.setEnabled(false);
+    }
+
+    public void bootupInit() {
+        communiFreqBox.setEnabled(true);
+        offButton.setEnabled(true);
+        coldButton.setEnabled(true);
+        hotButton.setEnabled(true);
+        initColdTempSlider.setEnabled(true);
+        onButton.setEnabled(false);
     }
 
     public int updateTempLabel() {

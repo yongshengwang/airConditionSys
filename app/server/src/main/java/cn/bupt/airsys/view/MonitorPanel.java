@@ -1,5 +1,6 @@
 package cn.bupt.airsys.view;
 
+import cn.bupt.airsys.model.Slave;
 import cn.bupt.airsys.model.table.SlaveListTableModel;
 
 import javax.swing.*;
@@ -26,12 +27,15 @@ public class MonitorPanel extends BasePanel {
     private SlaveListTableModel dataModel;
 
     public MonitorPanel() {
-        initView();
+        if(dataModel != null) {
+            initView();
+        }
     }
 
     public void setDataModel(SlaveListTableModel dataModel) {
         if (dataModel != null) {
             this.dataModel = dataModel;
+            initView();
         }
     }
 
@@ -46,7 +50,6 @@ public class MonitorPanel extends BasePanel {
     }
 
     private void createTable() {
-        dataModel = new SlaveListTableModel();
         tableView = new JTable(dataModel);
         scrollPane = new JScrollPane(tableView);
         try {

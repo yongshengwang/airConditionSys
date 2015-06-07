@@ -48,4 +48,8 @@ public class OverViewPanel extends BasePanel {
     public SysConfPanel getSysConfPanel() {
         return sysConfPanel;
     }
+
+    public MonitorPanel getMonitorPanel() {
+        return monitorPanel;
+    }
 }
