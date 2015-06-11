@@ -101,7 +101,7 @@ public class Server {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                //serv.run();
+                serv.start();
             }
         });
     }

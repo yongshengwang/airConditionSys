@@ -36,6 +36,7 @@ public class MainWindow extends JFrame {
                     @Override
                     public void onSlaveAdded(Slave s) {
                         monitorController.getListModel().addSlave(s);
+                        panel.getMonitorPanel().updateUI();
                     }
 
                     @Override
