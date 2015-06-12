@@ -1,26 +1,45 @@
 package cn.bupt.airsys.client.model;
 
+import com.sun.org.apache.xml.internal.dtm.DTMAxisTraverser;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 /**
  * Created by ALSO on 2015/5/26.
  */
 public class Slave {
 
+    public static final int PENDING_POWER = 0;
     public static final int SML_POWER = 1;
     public static final int MID_POWER = 2;
     public static final int HIGHT_POWER = 3;
-    public static final int COLD_MODE = 1;
-    public static final int HOT_MODE = 2;
+    public static final int COLD_MODE = 0;
+    public static final int HOT_MODE = 1;
+    private static final float TEMP_GRID = 0.25f;
+
 
     private String id;
     private int workMode = COLD_MODE;
     private Status currStatus;
     private String ipAddr;
-    private float currtentTemp;
+    private float currentTemp;
     private float targetTemp;
     private int power;
+    private float currentPay = 0;
+
+    private DataChangedListener listener;
+
     public Slave(String id, String ipAddr) {
         this.id = id;
         this.ipAddr = ipAddr;
+        this.power = PENDING_POWER;
+        this.currStatus = Status.PENDING;
+    }
+
+    public void addDataChangedListener(DataChangedListener listner) {
+        this.listener = listner;
     }
 
     public String getId() {
@@ -39,12 +58,12 @@ public class Slave {
         this.ipAddr = ipAddr;
     }
 
-    public float getCurrtentTemp() {
-        return currtentTemp;
+    public float getCurrentTemp() {
+        return currentTemp;
     }
 
-    public void setCurrtentTemp(float currtentTemp) {
-        this.currtentTemp = currtentTemp;
+    public void setCurrentTemp(float currentTemp) {
+        this.currentTemp = currentTemp;
     }
 
     public float getTargetTemp() {
@@ -67,19 +86,8 @@ public class Slave {
 
 
     public void setPower(int power) {
-        if (power > 0 && power < 4) {
-            switch (power - this.power) {
-                case -1:
-                    this.power = SML_POWER;
-                    break;
-
-                case 1:
-                    this.power = HIGHT_POWER;
-                    break;
-
-                default:
-                    break;
-            }
+        if (power >= PENDING_POWER && power <= HIGHT_POWER ) {
+            this.power = power;
         }
     }
 
@@ -99,7 +107,7 @@ public class Slave {
     }
 
     public String toString() {
-        return "Slave #" + id + "ip: " + ipAddr + " current temperature: " + currtentTemp + " power: " +
+        return "Slave #" + id + "ip: " + ipAddr + " current temperature: " + currentTemp + " power: " +
                 targetTemp + " power: " + power;
     }
 
@@ -111,6 +119,30 @@ public class Slave {
         if(workMode == COLD_MODE || workMode == HOT_MODE) {
             this.workMode = workMode;
         }
+    }
+
+    public void addTempChangeDaemon() {
+        new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // code below is not a good way
+                if (workMode == HOT_MODE && currentTemp >= 10.0f) {
+                    currentTemp += (power - 1) * TEMP_GRID;
+                } else if(workMode == COLD_MODE && currentTemp <= 33.0f) {
+                    currentTemp -= (power - 1) * TEMP_GRID;
+                }
+                listener.temperatureChanged(currentTemp);
+            }
+        }).start();
+    }
+
+    public float getCurrentPay() {
+        return currentPay;
+    }
+
+    public void setCurrentPay(float currentPay) {
+        this.currentPay = currentPay;
+        listener.paymentChanged(currentPay);
     }
 
     private enum Status {

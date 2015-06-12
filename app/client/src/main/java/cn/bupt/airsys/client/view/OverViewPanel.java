@@ -29,8 +29,7 @@ public class OverViewPanel extends JPanel {
     private JLabel tarTempLabel;
     private JLabel payLabel;
 
-    private int currPower = 2;
-
+    private int currPower = 0;
 
     public OverViewPanel() {
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
@@ -39,7 +38,7 @@ public class OverViewPanel extends JPanel {
         disableBtn();
     }
 
-    private void disableBtn() {
+    public void disableBtn() {
         powerButton.setEnabled(false);
         upButton.setEnabled(false);
         downButton.setEnabled(false);
@@ -187,7 +186,7 @@ public class OverViewPanel extends JPanel {
         modeButton.setDisabledIcon(createImageIcon("hot-32.png", "hot-mode"));
     }
 
-    public void setPayment(double payment) {
+    public void setPayment(float payment) {
         Object[] obj = {payment};
         MessageFormat payFormat = new MessageFormat(PAY_FORMAT);
         String  pay = payFormat.format(obj);

@@ -31,7 +31,7 @@ public class DataSender {
     }
 
     public boolean connetc(InetAddress addr, int port, int id) throws IOException {
-        System.out.println("connetc remote: " + addr + " port: " + port + "slave: " + id);
+        System.out.println("connetc remote: " + addr + " port: " + port + " slave id: " + id);
         byte[] sendData = new byte[2];
         sendData[0] = (byte)(2 & 0xff);
         sendData[1] = (byte)(id & 0xff);
@@ -49,6 +49,7 @@ public class DataSender {
     }
 
     public void sendStatus(InetAddress addr, int port, float temp) throws IOException {
+        System.out.println("connetc remote: " + addr + " port: " + port + " temp: " + temp);
         byte[] sendData = new byte[5];
         sendData[0] = (byte)(4 & 0xff);
         byte[] _tmp = ByteBuffer.allocate(4).putFloat((Float) temp).array();
@@ -60,6 +61,7 @@ public class DataSender {
     }
 
      public void request(InetAddress addr, int port, float temp, int power) throws IOException {
+         System.out.println("connetc remote: " + addr + " port: " + port + " temp: " + temp + " power: " + power);
         byte[] sendData = new byte[6];
         sendData[0] = (byte)(5 & 0xff);
         byte[] _tmp = ByteBuffer.allocate(4).putFloat((Float) temp).array();
@@ -70,15 +72,6 @@ public class DataSender {
         DatagramPacket sendPack = new DatagramPacket(sendData, sendData.length, addr, port);
         serverSocket.send(sendPack);
     }
-
-    public float byte2float(byte[] bytes) {
-        int asInt = (bytes[0] & 0xFF)
-                | ((bytes[1] & 0xFF) << 8)
-                | ((bytes[2] & 0xFF) << 16)
-                | ((bytes[3] & 0xFF) << 24);
-        return Float.intBitsToFloat(asInt);
-    }
-
 
 
 }
