@@ -23,16 +23,19 @@ public class MainWindow extends JFrame{
         panel = new OverViewPanel();
         add(panel);
         model = new Slave("1", Inet4Address.getLocalHost().getHostAddress());
-        model.setCurrentTemp(32);
-        model.setTargetTemp(20);
+        model.setTargetTemp(23);
         model.setWorkMode(Slave.COLD_MODE);
         ViewController controller = new ViewController(panel, model);
 
-        UdpServer serv = new UdpServer(Configure.DEFAULT_PORT, new ServerListener() {
+        final Thread serv = new Thread(new UdpServer(Configure.DEFAULT_RECV_PORT, new ServerListener() {
             @Override
             public void onReceive(String inetAddr, byte[] data) {
                 int type = (int)data[0];
+                System.out.println("bytes: " + data[0] + " " + data[1] + " " + data[2] + " " + data[3] + " " + data[4] + " " + data[5]);
                 switch(type) {
+                    case 1: // ack
+                        break;
+
                     case 6: // 6|mode|pay
                         model.setWorkMode((int)data[1]);
                         byte payByte[] = new byte[4];
@@ -55,12 +58,14 @@ public class MainWindow extends JFrame{
                         break;
                 }
             }
-
             @Override
             public void onException(Exception e) {
                 // TODO
             }
-        });
+        }));
+
+        serv.start();
+
 
         setSize(400, 200);
         setVisible(true);

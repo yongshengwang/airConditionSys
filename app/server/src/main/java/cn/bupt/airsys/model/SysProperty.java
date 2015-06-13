@@ -5,8 +5,8 @@ package cn.bupt.airsys.model;
  */
 public class SysProperty {
 
-    public static final int COLD = 1;
-    public static final int HOT = 2;
+    public static final int COLD = 0;
+    public static final int HOT = 1;
     public static final int LOW_FREQ = 1;
     public static final int HIGH_FREQ = 2;
     public static final int MID_FREQ = 3;

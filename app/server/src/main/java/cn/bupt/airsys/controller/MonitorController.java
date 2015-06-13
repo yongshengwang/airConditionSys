@@ -5,7 +5,6 @@ import cn.bupt.airsys.model.table.ListAdapterListModel;
 import cn.bupt.airsys.model.table.SlaveListTableModel;
 import cn.bupt.airsys.view.MonitorPanel;
 
-import javax.swing.*;
 import java.util.List;
 
 /**
@@ -19,12 +18,15 @@ public class MonitorController {
     public MonitorController(MonitorPanel view, List<Slave> slaves) {
         this.view = view;
         listModel = new ListAdapterListModel(slaves);
-        slaveListTableModel = new SlaveListTableModel();
-        slaveListTableModel.setListModel(listModel);
+        slaveListTableModel = new SlaveListTableModel(listModel);
         view.setDataModel(slaveListTableModel);
     }
 
     public ListAdapterListModel getListModel() {
         return  listModel;
+    }
+
+    public SlaveListTableModel getTableListModel() {
+        return slaveListTableModel;
     }
 }

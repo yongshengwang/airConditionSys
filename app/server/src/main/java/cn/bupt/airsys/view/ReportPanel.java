@@ -27,8 +27,9 @@ public class ReportPanel extends BasePanel {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         JPanel p = new JPanel();
+        p.setPreferredSize(new Dimension(500, 75));
         p.setLayout(new FlowLayout(FlowLayout.CENTER));
-        p.setBorder(BorderFactory.createTitledBorder("^_^"));
+        p.setBorder(BorderFactory.createTitledBorder("报表控制"));
         typeComnoBox = new JComboBox();
         typeComnoBox.addItem("日报表");
         typeComnoBox.addItem("周报表");
@@ -39,7 +40,7 @@ public class ReportPanel extends BasePanel {
         p.add(priterButton);
         add(p);
         p = new JPanel();
-        dataModel = new SlaveListTableModel();
+        p.setBorder(BorderFactory.createTitledBorder(""));
         tableView = new JTable(dataModel);
         scrollPane = new JScrollPane(tableView);
         p.add(scrollPane);

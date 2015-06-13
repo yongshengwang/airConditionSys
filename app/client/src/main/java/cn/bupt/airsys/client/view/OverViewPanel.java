@@ -135,16 +135,20 @@ public class OverViewPanel extends JPanel {
         return new ImageIcon(getClass().getClassLoader().getResource(filename), description);
     }
 
-    public void powerChange() {
-        System.out.println("currPower: " + currPower);
-        if(++currPower <= 3 ) {
-            addPowerImageBtn(1);
-        } else {
-            currPower = 1;
-            powerPanel.remove(1);
-            powerPanel.remove(1);
-        }
+    public int powerChange() {
+        powerPanel.removeAll();
+        currPower = (++currPower > 3) ? 1 : currPower;
+        addPowerImageBtn(currPower);
         powerPanel.updateUI();
+        return currPower;
+    }
+
+    public int powerChange(int power) {
+        if(power == currPower) return power;
+        powerPanel.removeAll();
+        addPowerImageBtn(power);
+        powerPanel.updateUI();
+        return currPower;
     }
 
 
@@ -155,7 +159,6 @@ public class OverViewPanel extends JPanel {
         j.add(new OverViewPanel());
         j.setSize(400, 200);
         j.setVisible(true);
-
     }
 
     private void addPowerImageBtn(int num) {

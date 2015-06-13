@@ -66,12 +66,14 @@ public class ViewController {
                 if(!isOn) {
                     try {
                         sender.connetc(remoteAddr, port, Integer.valueOf(model.getId()));
-                        sender.request(remoteAddr, port, model.getTargetTemp(), model.getPower());
+                        sender.request(remoteAddr, port, model.getTargetTemp(), Slave.SML_POWER);
                         dataTimer.start();
                         view.initStatus();
+                        view.setCurrTemp((int) model.getCurrentTemp());
                         view.setTargetTemp((int) model.getTargetTemp());
                         view.setPayment(0.0f);
                         view.bootButton.setText("关机");
+                        model.addTempChangeDaemon();
                         model.addDataChangedListener(new DataChangedListener() {
                             @Override
                             public void temperatureChanged(float temp) {
@@ -81,6 +83,16 @@ public class ViewController {
                             @Override
                             public void paymentChanged(float pay) {
                                 view.setPayment(pay);
+                            }
+
+                            @Override
+                            public void powerChanged(int power) {
+                                view.powerChange(power);
+                            }
+
+                            @Override
+                            public void workModeChanged(int workMode) {
+                                view.changeWorkMode();
                             }
 
                             @Override
@@ -109,7 +121,11 @@ public class ViewController {
         view.powerButton.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                view.powerChange();
+                try {
+                    sender.request(remoteAddr, port, model.getTargetTemp(), view.powerChange());
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
             }
         });
 

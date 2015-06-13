@@ -2,10 +2,10 @@ package cn.bupt.airsys.model.table;
 
 import cn.bupt.airsys.model.Slave;
 
-import javax.swing.*;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 import javax.swing.table.AbstractTableModel;
+import java.awt.*;
 
 /**
  * Created by ALSO on 2015/6/1.
@@ -18,11 +18,15 @@ public class SlaveListTableModel extends AbstractTableModel {
             "功率",
             "IP"
     };
-    ;
-    private ListModel<Slave> listModel = new DefaultListModel<Slave>();
+
+    private ListAdapterListModel listModel;
     private ListModelChangeListener listModelChangeListener = new ListModelChangeListener();
 
-    public final void setListModel(ListModel<Slave> listModel) {
+    public SlaveListTableModel(ListAdapterListModel model) {
+        this.listModel = model;
+    }
+
+    public final void setListModel(ListAdapterListModel listModel) {
         if (this.listModel != null) {
             this.listModel.removeListDataListener(listModelChangeListener);
         }
@@ -31,6 +35,15 @@ public class SlaveListTableModel extends AbstractTableModel {
             listModel.addListDataListener(listModelChangeListener);
         }
         fireTableDataChanged();
+    }
+
+    public Color getRowColor(int rowIndex) {
+        Slave slave = (Slave) listModel.getElementAt(rowIndex);
+        if (slave.getCurrStatus() == Slave.WORKING) {
+            return Color.green;
+        } else {
+            return Color.gray;
+        }
     }
 
     @Override
@@ -75,6 +88,21 @@ public class SlaveListTableModel extends AbstractTableModel {
                 break;
         }
         return columnValue;
+    }
+
+    public void slaveAdded(Slave s) {
+        listModel.addSlave(s);
+        fireTableDataChanged();
+    }
+
+    public void slaveChanged(Slave s) {
+        listModel.changeSlave(s);
+        fireTableDataChanged();
+    }
+
+    public void slaveRemoved(Slave s) {
+        listModel.removeSlave(s);
+        fireTableDataChanged();
     }
 
     public String getColumnName(int column) {

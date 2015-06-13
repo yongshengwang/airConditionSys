@@ -3,6 +3,7 @@ package cn.bupt.airsys.utils;
 import cn.bupt.airsys.exception.MsgException;
 
 import java.nio.ByteBuffer;
+import java.sql.Timestamp;
 
 /**
  * Created by ALSO on 2015/5/21.
@@ -47,14 +48,27 @@ public class Utility {
     }
 
     public static float byte2float(byte[] bytes) {
-        int asInt = (bytes[0] & 0xFF)
+        return ByteBuffer.wrap(bytes).getFloat();
+        /*int asInt = (bytes[0] & 0xFF)
                 | ((bytes[1] & 0xFF) << 8)
                 | ((bytes[2] & 0xFF) << 16)
                 | ((bytes[3] & 0xFF) << 24);
-        return Float.intBitsToFloat(asInt);
+        return Float.intBitsToFloat(asInt);*/
     }
 
     public static void main(String args[]) {
-        return;
+        System.out.println(System.currentTimeMillis());
+        Timestamp stamp = new Timestamp(System.currentTimeMillis());
+        System.out.println(stamp.getTime());
+
+/*        Timestamp stamp = new Timestamp(System.currentTimeMillis());
+        System.out.println(stamp.toString());
+        try {
+            Thread.sleep(2);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Timestamp stamp2 = new Timestamp(System.currentTimeMillis());
+        System.out.println(stamp.toString());*/
     }
 }

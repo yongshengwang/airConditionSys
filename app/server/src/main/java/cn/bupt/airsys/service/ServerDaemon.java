@@ -20,6 +20,7 @@ public class ServerDaemon implements Runnable {
     public ServerDaemon(int port, ServerListener listener) {
         this.mServerListener = listener;
         this.localPort = port;
+        udpInit();
     }
 
     public ServerDaemon(ServerListener listener) {
@@ -39,7 +40,7 @@ public class ServerDaemon implements Runnable {
         udpInit();
         byte[]  receiveData = null;
         for(;;) {
-            receiveData = new byte[8];
+            receiveData = new byte[6];
             DatagramPacket receivePack = new DatagramPacket(receiveData, receiveData.length);
             try {
                 serverSocket.receive(receivePack);

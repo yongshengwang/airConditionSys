@@ -9,6 +9,7 @@ import cn.bupt.airsys.model.Slave;
 import cn.bupt.airsys.model.SysProperty;
 
 import javax.swing.*;
+import java.net.SocketException;
 import java.util.ArrayList;
 
 /**
@@ -30,21 +31,24 @@ public class MainWindow extends JFrame {
                 server = new Server(new SlaveDataListener() {
                     @Override
                     public void onSlaveChangeed(Slave s) {
-                        monitorController.getListModel().changeSlave(s);
+                        monitorController.getTableListModel().slaveChanged(s);
                     }
 
                     @Override
                     public void onSlaveAdded(Slave s) {
-                        monitorController.getListModel().addSlave(s);
-                        panel.getMonitorPanel().updateUI();
+                        monitorController.getTableListModel().slaveAdded(s);
                     }
 
                     @Override
                     public void onSlaveRemoved(Slave s) {
-                        monitorController.getListModel().removeSlave(s);
+                        monitorController.getTableListModel().slaveRemoved(s);
                     }
                 });
-                server.bootUp();;
+                try {
+                    server.bootUp();
+                } catch (SocketException e) {
+                    e.printStackTrace();
+                }
             }
         });
         setSize(650, 850);

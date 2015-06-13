@@ -1,9 +1,9 @@
 package cn.bupt.airsys.view;
 
-import cn.bupt.airsys.model.Slave;
 import cn.bupt.airsys.model.table.SlaveListTableModel;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
 import java.awt.*;
 import java.lang.reflect.Constructor;
@@ -63,5 +63,14 @@ public class MonitorPanel extends BasePanel {
             System.err.println(e.getMessage());
         }
         tableView.setRowHeight(INITIAL_ROWHEIGHT);
+        DefaultTableCellRenderer colorRender = new DefaultTableCellRenderer() {
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                c.setBackground(dataModel.getRowColor(row));
+                return c;
+            }
+        };
+        tableView.setDefaultRenderer(Object.class, colorRender);
+
     }
 }

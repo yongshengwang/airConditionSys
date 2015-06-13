@@ -1,5 +1,6 @@
 package cn.bupt.airsys.client.model;
 
+import cn.bupt.airsys.client.Configure;
 import com.sun.org.apache.xml.internal.dtm.DTMAxisTraverser;
 
 import javax.swing.*;
@@ -22,7 +23,6 @@ public class Slave {
 
     private String id;
     private int workMode = COLD_MODE;
-    private Status currStatus;
     private String ipAddr;
     private float currentTemp;
     private float targetTemp;
@@ -35,7 +35,7 @@ public class Slave {
         this.id = id;
         this.ipAddr = ipAddr;
         this.power = PENDING_POWER;
-        this.currStatus = Status.PENDING;
+        this.currentTemp = Configure.CURRENT_TEMP;
     }
 
     public void addDataChangedListener(DataChangedListener listner) {
@@ -86,23 +86,10 @@ public class Slave {
 
 
     public void setPower(int power) {
-        if (power >= PENDING_POWER && power <= HIGHT_POWER ) {
+        if (power != this.power && power >= PENDING_POWER && power <= HIGHT_POWER) {
             this.power = power;
-        }
-    }
-
-    public String getCurrStatus() {
-        if (currStatus == Status.PENDING) {
-            return "PENDING";
-        }
-        return "WORKING";
-    }
-
-    public void setCurrStatus(String currStatus) {
-        if (currStatus.equals("PEDING")) {
-            this.currStatus = Status.PENDING;
-        } else {
-            this.currStatus = Status.WORKING;
+            System.out.println("power: " + power);
+            listener.powerChanged(power);
         }
     }
 
@@ -116,8 +103,9 @@ public class Slave {
     }
 
     public void setWorkMode(int workMode) {
-        if(workMode == COLD_MODE || workMode == HOT_MODE) {
+        if(workMode != this.workMode && (workMode == COLD_MODE || workMode == HOT_MODE)) {
             this.workMode = workMode;
+            listener.workModeChanged(workMode);
         }
     }
 
@@ -126,10 +114,12 @@ public class Slave {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // code below is not a good way
-                if (workMode == HOT_MODE && currentTemp >= 10.0f) {
-                    currentTemp += (power - 1) * TEMP_GRID;
-                } else if(workMode == COLD_MODE && currentTemp <= 33.0f) {
-                    currentTemp -= (power - 1) * TEMP_GRID;
+                if (workMode == HOT_MODE && currentTemp > 10.0f) {
+                    currentTemp += power * TEMP_GRID;
+                    currentTemp -= TEMP_GRID * 0.5;
+                } else if(workMode == COLD_MODE && currentTemp < 33.0f) {
+                    currentTemp -= power * TEMP_GRID;
+                    currentTemp += TEMP_GRID * 0.5;
                 }
                 listener.temperatureChanged(currentTemp);
             }
@@ -143,9 +133,5 @@ public class Slave {
     public void setCurrentPay(float currentPay) {
         this.currentPay = currentPay;
         listener.paymentChanged(currentPay);
-    }
-
-    private enum Status {
-        PENDING, WORKING
     }
 }

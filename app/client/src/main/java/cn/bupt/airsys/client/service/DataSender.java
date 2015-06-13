@@ -49,13 +49,15 @@ public class DataSender {
     }
 
     public void sendStatus(InetAddress addr, int port, float temp) throws IOException {
-        System.out.println("connetc remote: " + addr + " port: " + port + " temp: " + temp);
+        System.out.println("status send: " + addr + " port: " + port + " temp: " + temp);
         byte[] sendData = new byte[5];
         sendData[0] = (byte)(4 & 0xff);
         byte[] _tmp = ByteBuffer.allocate(4).putFloat((Float) temp).array();
         for(int i = 1; i < 5; i++) {
             sendData[i] = _tmp[i-1];
         }
+        System.out.println("send bytes: " + sendData[0] + " " + sendData[1] + " " + sendData[2] + " " + sendData[3] + " " + sendData[4] );
+
         DatagramPacket sendPack = new DatagramPacket(sendData, sendData.length, addr, port);
         serverSocket.send(sendPack);
     }

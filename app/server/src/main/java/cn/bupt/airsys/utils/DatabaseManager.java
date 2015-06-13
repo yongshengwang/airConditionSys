@@ -20,8 +20,8 @@ public class DatabaseManager {
             try {
                 // Load Driver
                 Class.forName(DRIVER);
-                System.out.println(Configure.DB_DSN);
-                con = DriverManager.getConnection(Configure.DB_DSN, Configure.DB_USER, Configure.DB_PASSWD);
+                singleton = new DatabaseManager();
+                singleton.con = DriverManager.getConnection(Configure.DB_DSN, Configure.DB_USER, Configure.DB_PASSWD);
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             } catch (SQLException e) {
@@ -52,5 +52,4 @@ public class DatabaseManager {
         stm.executeUpdate(sql);
         stm.close();
     }
-
 }

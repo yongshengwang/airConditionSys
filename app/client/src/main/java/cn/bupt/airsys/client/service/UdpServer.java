@@ -20,7 +20,7 @@ public class UdpServer implements Runnable {
     }
 
     public UdpServer(ServerListener listener) {
-        this(Configure.DEFAULT_PORT, listener);
+        this(Configure.DEFAULT_RECV_PORT, listener);
     }
 
 
@@ -29,9 +29,9 @@ public class UdpServer implements Runnable {
         try {
             serverSocket = new DatagramSocket(port);
         } catch (SocketException e) {
+            System.out.println(e.getMessage());
             listener.onException(e);
         }
-
         byte[] receiveData = null;
         for(;;){
             receiveData = new byte[6];

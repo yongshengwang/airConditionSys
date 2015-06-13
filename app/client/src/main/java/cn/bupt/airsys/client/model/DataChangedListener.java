@@ -6,7 +6,7 @@ package cn.bupt.airsys.client.model;
 public interface DataChangedListener {
     public void temperatureChanged(float temp);
     public void paymentChanged(float pay);
+    public void powerChanged(int power);
+    public void workModeChanged(int workMode);
     public void onException(Exception e);
-
-    // TODO
 }
