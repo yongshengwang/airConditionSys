@@ -11,6 +11,7 @@ public class OverViewPanel extends BasePanel {
     private JTabbedPane tabbedPane;
     private SysConfPanel sysConfPanel;
     private MonitorPanel monitorPanel;
+    private ReportPanel reportPanel;
 
     public OverViewPanel() {
         initView();
@@ -41,7 +42,8 @@ public class OverViewPanel extends BasePanel {
         ctrlPanel.add(monitorPanel);
 
         tabbedPane.add(BORDER, ctrlPanel);
-        tabbedPane.add("报表系统", new ReportPanel());
+        reportPanel = new ReportPanel();
+        tabbedPane.add("报表系统", reportPanel);
         tabbedPane.setTabPlacement(JTabbedPane.LEFT);
     }
 
@@ -51,5 +53,9 @@ public class OverViewPanel extends BasePanel {
 
     public MonitorPanel getMonitorPanel() {
         return monitorPanel;
+    }
+
+    public ReportPanel getReportPanel() {
+        return reportPanel;
     }
 }

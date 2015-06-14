@@ -1,9 +1,6 @@
 package cn.bupt.airsys.view;
 
-import cn.bupt.airsys.controller.AbstractListener;
-import cn.bupt.airsys.controller.MonitorController;
-import cn.bupt.airsys.controller.SlaveDataListener;
-import cn.bupt.airsys.controller.SysCtrlController;
+import cn.bupt.airsys.controller.*;
 import cn.bupt.airsys.model.Server;
 import cn.bupt.airsys.model.Slave;
 import cn.bupt.airsys.model.SysProperty;
@@ -19,6 +16,7 @@ public class MainWindow extends JFrame {
     private OverViewPanel panel;
     private SysCtrlController sysCtrlController;
     private MonitorController monitorController;
+    private ReportController reportController;
     private Server server;
 
     public MainWindow() throws Exception {
@@ -51,6 +49,7 @@ public class MainWindow extends JFrame {
                 }
             }
         });
+        reportController = new ReportController(panel.getReportPanel());
         setSize(650, 850);
         setVisible(true);
     }

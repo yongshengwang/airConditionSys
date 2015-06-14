@@ -3,7 +3,6 @@ package cn.bupt.airsys.utils;
 import cn.bupt.airsys.exception.MsgException;
 
 import java.nio.ByteBuffer;
-import java.sql.Timestamp;
 
 /**
  * Created by ALSO on 2015/5/21.
@@ -57,9 +56,11 @@ public class Utility {
     }
 
     public static void main(String args[]) {
+/*
         System.out.println(System.currentTimeMillis());
         Timestamp stamp = new Timestamp(System.currentTimeMillis());
         System.out.println(stamp.getTime());
+*/
 
 /*        Timestamp stamp = new Timestamp(System.currentTimeMillis());
         System.out.println(stamp.toString());

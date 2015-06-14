@@ -1,6 +1,6 @@
 package cn.bupt.airsys.view;
 
-import cn.bupt.airsys.model.table.SlaveListTableModel;
+import cn.bupt.airsys.model.table.ReportListTableModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,7 +17,7 @@ public class ReportPanel extends BasePanel {
 
     private JTable tableView;
 
-    private SlaveListTableModel dataModel;
+    private ReportListTableModel dataModel;
 
     public ReportPanel() {
         initView();
@@ -45,5 +45,11 @@ public class ReportPanel extends BasePanel {
         scrollPane = new JScrollPane(tableView);
         p.add(scrollPane);
         add(p);
+    }
+
+    public void setDataModel(ReportListTableModel listTableModel) {
+        this.dataModel = listTableModel;
+        removeAll();
+        initView();
     }
 }
