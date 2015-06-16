@@ -18,8 +18,11 @@ public class Slave {
     public static final int HIGHT_POWER = 3;
     public static final int COLD_MODE = 0;
     public static final int HOT_MODE = 1;
-    private static final float TEMP_GRID = 0.25f;
 
+    public static final int PENDING = 0;
+    public static final int WORKING = 1;
+
+    private static final float TEMP_GRID = 0.25f;
 
     private String id;
     private int workMode = COLD_MODE;
@@ -28,6 +31,7 @@ public class Slave {
     private float targetTemp;
     private int power;
     private float currentPay = 0;
+    private int status;
 
     private DataChangedListener listener;
 
@@ -133,5 +137,15 @@ public class Slave {
     public void setCurrentPay(float currentPay) {
         this.currentPay = currentPay;
         listener.paymentChanged(currentPay);
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        if(status == PENDING || status == WORKING) {
+            this.status = status;
+        }
     }
 }

@@ -20,5 +20,5 @@ public interface Configure {
 
     public static final int HEARTBEAT_TICK = 1000 * 5; // 5 sec
     public static final int MAX_SERV_NUM = 3;
-    public static final float PRICE[] = {0.0f, 0.00003f, 0.00005f, 0.00007f};
+    public static final float PRICE[] = {0.0f, 0.8f * 5 * 0.0001f, 1.0f * 5 * 0.0001f, 1.3f * 5 * 0.0001f};
 }

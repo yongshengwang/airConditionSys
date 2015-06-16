@@ -15,6 +15,7 @@ import java.lang.reflect.Method;
 public class MonitorPanel extends BasePanel {
     private static final String BORDER = "丛控机状态";
     private final int INITIAL_ROWHEIGHT = 25;
+    private final int DIVIDERlOCATION = 300;
 
     private JScrollPane scrollPane;
 
@@ -27,14 +28,13 @@ public class MonitorPanel extends BasePanel {
     private SlaveListTableModel dataModel;
 
     public MonitorPanel() {
-        if(dataModel != null) {
-            initView();
-        }
+        initView();
     }
 
     public void setDataModel(SlaveListTableModel dataModel) {
         if (dataModel != null) {
             this.dataModel = dataModel;
+            removeAll();
             initView();
         }
     }
@@ -45,7 +45,7 @@ public class MonitorPanel extends BasePanel {
         tempGraph = new TempGraphPanel();
         splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scrollPane, tempGraph);
         splitPane.setContinuousLayout(true);
-        splitPane.setDividerLocation(200);
+        splitPane.setDividerLocation(DIVIDERlOCATION);
         add(splitPane, BorderLayout.CENTER);
     }
 
@@ -71,6 +71,13 @@ public class MonitorPanel extends BasePanel {
             }
         };
         tableView.setDefaultRenderer(Object.class, colorRender);
+    }
 
+    public TempGraphPanel getTempGraph() {
+        return tempGraph;
+    }
+
+    public JTable getTableView() {
+        return tableView;
     }
 }

@@ -1,6 +1,7 @@
 package cn.bupt.airsys.client.service;
 
 import cn.bupt.airsys.client.Configure;
+import cn.bupt.airsys.client.utils.Utility;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -52,7 +53,8 @@ public class DataSender {
         System.out.println("status send: " + addr + " port: " + port + " temp: " + temp);
         byte[] sendData = new byte[5];
         sendData[0] = (byte)(4 & 0xff);
-        byte[] _tmp = ByteBuffer.allocate(4).putFloat((Float) temp).array();
+        //byte[] _tmp = ByteBuffer.allocate(4).putFloat((Float) temp).array();
+        byte[] _tmp = Utility.float2bytes(temp);
         for(int i = 1; i < 5; i++) {
             sendData[i] = _tmp[i-1];
         }
@@ -63,14 +65,15 @@ public class DataSender {
     }
 
      public void request(InetAddress addr, int port, float temp, int power) throws IOException {
-         System.out.println("connetc remote: " + addr + " port: " + port + " temp: " + temp + " power: " + power);
+         System.out.println("request send: " + addr + " port: " + port + " temp: " + temp + " power: " + power);
         byte[] sendData = new byte[6];
         sendData[0] = (byte)(5 & 0xff);
-        byte[] _tmp = ByteBuffer.allocate(4).putFloat((Float) temp).array();
+        //byte[] _tmp = ByteBuffer.allocate(4).putFloat((Float) temp).array();
+        byte[] _tmp = Utility.float2bytes(temp);
         for(int i = 1; i < 5; i++) {
             sendData[i] = _tmp[i-1];
         }
-         sendData[5] = (byte)(power & 0xff);
+        sendData[5] = (byte)(power & 0xff);
         DatagramPacket sendPack = new DatagramPacket(sendData, sendData.length, addr, port);
         serverSocket.send(sendPack);
     }

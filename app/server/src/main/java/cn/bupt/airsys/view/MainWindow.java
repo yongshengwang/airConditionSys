@@ -30,6 +30,8 @@ public class MainWindow extends JFrame {
                     @Override
                     public void onSlaveChangeed(Slave s) {
                         monitorController.getTableListModel().slaveChanged(s);
+                        monitorController.setTargetTempPoint(s.getTargetTemp());
+                        monitorController.addTempPoint(s.getCurrtentTemp());
                     }
 
                     @Override

@@ -1,5 +1,7 @@
 package cn.bupt.airsys.model;
 
+import java.util.ArrayList;
+
 /**
  * Created by ALSO on 2015/5/26.
  */
@@ -11,6 +13,8 @@ public class Slave {
     public static final int HIGHT_POWER = 3;
     public static final int PENDING = 0;
     public static final int WORKING = 1;
+
+    public ArrayList<Float> tempList;
 
     private String id;
     private int currStatus;
@@ -26,6 +30,7 @@ public class Slave {
         this.ipAddr = ipAddr;
         this.power = SML_POWER;
         pay = 0.0f;
+        tempList = new ArrayList<Float>();
     }
 
     public String getId() {

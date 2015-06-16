@@ -47,9 +47,12 @@ public class ServerDaemon implements Runnable {
                 InetAddress addr = receivePack.getAddress();
                 mServerListener.onReceive(addr.getHostAddress(), receivePack.getData());
                 int port = receivePack.getPort();
-                byte[] sendData = new byte[1]; sendData[0] = 1;
-                DatagramPacket sendPack = new DatagramPacket(sendData, 1, addr, port);
-                serverSocket.send(sendPack);
+                if (receivePack.getData()[0] == 2) {
+                    byte[] sendData = new byte[1];
+                    sendData[0] = 1;
+                    DatagramPacket sendPack = new DatagramPacket(sendData, 1, addr, port);
+                    serverSocket.send(sendPack);
+                }
             } catch (IOException e) {
                 this.mServerListener.onException(new ServerException(e.toString()));
                 //e.printStackTrace();

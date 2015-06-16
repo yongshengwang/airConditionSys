@@ -91,10 +91,14 @@ public class Server {
 
                             if (servSlaveList.isEmpty() || servSlaveList.size() <= Configure.MAX_SERV_NUM) {
                                 s.setCurrStatus(Slave.WORKING);
+                                float tarTemp = SysProperty.getInstance().getInitTemp();
+                                s.setTargetTemp(tarTemp);
                                 servSlaveList.push(set);
                             } else {
                                 s.setCurrStatus(Slave.PENDING);
                                 s.setPower(Slave.PENDING_POWER);
+                                float tarTemp = SysProperty.getInstance().getInitTemp();
+                                s.setTargetTemp(tarTemp);
                                 pendingSlaveList.push(set);
                             }
                             try {
@@ -156,6 +160,7 @@ public class Server {
                             System.out.println("slave: " + inetAddr + " curr temp: " + temp);
 
                             // if slave's temp reaches the target temperatuer
+                            //  @deprecated
                             if (ss.getCurrStatus() == Slave.WORKING && ((temp <= ss.getTargetTemp() && SysProperty.getInstance().getWorkMode() == SysProperty.COLD) ||
                                     (temp >= ss.getTargetTemp() && SysProperty.getInstance().getWorkMode() == SysProperty.HOT))) {
                                 ss.setCurrStatus(Slave.PENDING);
@@ -163,7 +168,6 @@ public class Server {
                                 System.out.println("power: " + ss.getPower());
                                 listener.onSlaveChangeed(ss);
                                 // move this slave from serv list to pending list
-
                                 for (TimeSet set : servSlaveList) {
                                     if (set.ip.equals(inetAddr)) {
                                         pendingSlaveList.push(set);
@@ -171,17 +175,16 @@ public class Server {
                                         break;
                                     }
                                 }
-
-                                // TODO DB
                             } else {
                                 ss.setCurrtentTemp(temp);
+                                ss.tempList.add(temp);
                                 listener.onSlaveChangeed(ss);
                             }
                             // if servlist is still not full,try to move one slave from pending list to serv list
                             if ((servSlaveList.isEmpty() || servSlaveList.size() < Configure.MAX_SERV_NUM) && !pendingSlaveList.isEmpty()) {
                                 TimeSet set = pendingSlaveList.getFirst();
                                 ss = slaves.get(set.ip);
-                                if (ss != null && Math.abs(ss.getCurrtentTemp() - ss.getTargetTemp()) > 2.0f) {
+                                if (ss != null && Math.abs(ss.getCurrtentTemp() - ss.getTargetTemp()) > 1.0f) {
                                     servSlaveList.push(set);
                                     pendingSlaveList.remove(set);
                                     ss.setCurrStatus(Slave.WORKING);
@@ -233,7 +236,6 @@ public class Server {
                                     (SysProperty.getInstance().getWorkMode() == SysProperty.HOT && temp >= 25.0f && temp <= 30.0f)) {
                                 s2.setTargetTemp(temp);
                             }
-                            // TODO DB
                             listener.onSlaveChangeed(s2);
                         }
                         break;

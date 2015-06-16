@@ -78,6 +78,28 @@ public class ViewController {
                             @Override
                             public void temperatureChanged(float temp) {
                                 view.setCurrTemp((int)temp);
+                                // if temp get the target, slave need to send stop request
+                                if(model.getStatus() == Slave.WORKING && (model.getWorkMode() == Slave.COLD_MODE && temp <= model.getTargetTemp())
+                                        || (model.getWorkMode() == Slave.HOT_MODE && temp >= model.getTargetTemp())) {
+                                    try {
+                                        model.setPower(Slave.PENDING_POWER);
+                                        model.setStatus(Slave.PENDING);
+                                        sender.request(remoteAddr, port, model.getTargetTemp(), Slave.PENDING_POWER);
+                                    } catch (IOException e1) {
+                                        e1.printStackTrace();
+                                    }
+                                }
+                                // need to re-request for work mode
+                                // Attention: slave's working mode does not mean it will get >0 power
+                                if(model.getStatus() == Slave.PENDING && Math.abs(temp-model.getTargetTemp()) > 1.0f ) {
+                                    try {
+                                        model.setPower(Slave.SML_POWER);
+                                        model.setStatus(Slave.WORKING);
+                                        sender.request(remoteAddr, port, model.getTargetTemp(), Slave.SML_POWER);
+                                    } catch (IOException e1) {
+                                        e1.printStackTrace();
+                                    }
+                                }
                             }
 
                             @Override
@@ -97,6 +119,7 @@ public class ViewController {
 
                             @Override
                             public void onException(Exception e) {
+                                e.getStackTrace();
                                 // TODO
                             }
                         });
