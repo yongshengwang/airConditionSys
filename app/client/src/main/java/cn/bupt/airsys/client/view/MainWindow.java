@@ -45,13 +45,20 @@ public class MainWindow extends JFrame{
                         model.setCurrentPay(Utility.byte2float(payByte));
                         break;
 
-                    case 7:
+                    case 7: //7|targetTemp|power
                         byte targetByte[] = new byte[4];
-                        // next 4 bytes is the target temp...然并卵, But necessary to check our request is pkg missing or not
-                        /*for (int i = 0; i < 4; i++) {
+                        for (int i = 0; i < 4; i++) {
                             targetByte[i] = data[i + 1];
-                        }*/
-                        model.setPower((int)data[5]);
+                        }
+                        float targetTemp = Utility.byte2float(targetByte);
+                        int power = (int) data[5];
+                        if(power > Slave.PENDING_POWER) {
+                            model.setStatus(Slave.WORKING);
+                        } else {
+                            model.setStatus(Slave.PENDING);
+                        }
+                        model.setTargetTemp(targetTemp);
+                        model.setPower(power);
                         break;
 
                     default:

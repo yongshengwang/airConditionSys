@@ -93,12 +93,9 @@ public class ViewController {
                                 // Attention: slave's working mode does not mean it will get >0 power
                                 if(model.getStatus() == Slave.PENDING && Math.abs(temp-model.getTargetTemp()) > 1.0f ) {
                                     try {
-                                        model.setPower(Slave.SML_POWER);
-                                        model.setStatus(Slave.WORKING);
+                                        int sendPower = model.getPower() == 0 ? Slave.SML_POWER : model.getPower();
                                         sender.request(remoteAddr, port, model.getTargetTemp(), Slave.SML_POWER);
-                                    } catch (IOException e1) {
-                                        e1.printStackTrace();
-                                    }
+                                    } catch (IOException e1) { e1.printStackTrace(); }
                                 }
                             }
 
@@ -145,7 +142,14 @@ public class ViewController {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    sender.request(remoteAddr, port, model.getTargetTemp(), view.powerChange());
+                    int power = model.getPower();
+                    if(power == Slave.HIGHT_POWER) {
+                        power = Slave.SML_POWER;
+                    } else {
+                        power++;
+                    }
+                    sender.request(remoteAddr, port, model.getTargetTemp(), power);
+                    view.powerChange(power);
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }

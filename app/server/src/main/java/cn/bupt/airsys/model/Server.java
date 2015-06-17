@@ -204,13 +204,8 @@ public class Server {
                             int power = requestData[5];
                             System.out.println("Slave: " + inetAddr + " req temp: " + temp + " req power: " + power);
                             Slave s2 = slaves.get(inetAddr);
-                            try {
-                                sql = "insert into transaction_log (`slave_id`, `type`, `power`, `temperature`) VALUES ('" + s2.getId() + "', 'request', '" + power + "', '" + temp + "');";
-                                DatabaseManager.getInstance().insert(sql);
-                            } catch (SQLException e) {
-                                e.printStackTrace();
-                            }
-                            // if the slave is working we need to cal the pay
+
+                            // if the slave is working before the request we need to cal the pay
                             if (s2.getCurrStatus() == Slave.WORKING) {
                                 for (TimeSet set : servSlaveList) {
                                     if (set.ip.equals(s2.getIpAddr())) {
@@ -224,14 +219,38 @@ public class Server {
                                             System.out.println(sql);
                                             DatabaseManager.getInstance().insert(sql);
                                             set.start_time = now;
+                                            // set the power, if the request power is zero
+                                            // we need the move the slave to pending list
                                             s2.setPower(power);
-                                        } catch (SQLException e) {
-                                            e.printStackTrace();
-                                        }
+                                            if(power == Slave.PENDING_POWER) {
+                                                s2.setCurrStatus(Slave.PENDING);
+                                                for (TimeSet ts : servSlaveList) {
+                                                    if (ts.ip.equals(inetAddr)) {
+                                                        pendingSlaveList.push(ts);
+                                                        servSlaveList.remove(ts);
+                                                        break;
+                                                    }
+                                                }// for get the timeset
+                                                // if servlist is still not full,try to move one slave from pending list to serv list
+                                                if ((servSlaveList.isEmpty() || servSlaveList.size() < Configure.MAX_SERV_NUM) && !pendingSlaveList.isEmpty()) {
+                                                    set = pendingSlaveList.getFirst();
+                                                    Slave ss = slaves.get(set.ip);
+                                                    if (ss != null && Math.abs(ss.getCurrtentTemp() - ss.getTargetTemp()) > 1.0f) {
+                                                        servSlaveList.push(set);
+                                                        pendingSlaveList.remove(set);
+                                                        ss.setCurrStatus(Slave.WORKING);
+                                                        System.out.println("active slave: " + ss.getIpAddr());
+                                                    }
+                                                }
+
+                                            }
+                                        } catch (SQLException e) { e.printStackTrace(); }
                                         break;
                                     }
                                 }
                             }
+
+                            // set the target temp
                             if ((SysProperty.getInstance().getWorkMode() == SysProperty.COLD && temp <= 25.0f && temp >= 18.0f) ||
                                     (SysProperty.getInstance().getWorkMode() == SysProperty.HOT && temp >= 25.0f && temp <= 30.0f)) {
                                 s2.setTargetTemp(temp);
