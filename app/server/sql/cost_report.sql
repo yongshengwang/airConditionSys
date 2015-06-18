@@ -31,6 +31,8 @@ CREATE TABLE IF NOT EXISTS `cost_report` (
   `slave_id` int(11) NOT NULL,
   `cost` float NOT NULL,
   `air_volume` tinyint(4) NOT NULL,
+  `start_temperature` float NOT NULL,
+  `end_temperature` float NOT NULL,
   `start_time` timestamp NULL DEFAULT NULL,
   `end_time` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

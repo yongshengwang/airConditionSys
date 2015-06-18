@@ -46,7 +46,10 @@ public class ListAdapterListModel extends AbstractListModel {
     }
 
     public Slave getSlave(int index) {
-        return slaveList.get(index);
+        if(index >= 0) {
+            return slaveList.get(index);
+        }
+        return null;
     }
 
     public void removeSlave(int index) {

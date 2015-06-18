@@ -46,11 +46,11 @@ public class ServerDaemon implements Runnable {
                 serverSocket.receive(receivePack);
                 InetAddress addr = receivePack.getAddress();
                 mServerListener.onReceive(addr.getHostAddress(), receivePack.getData());
-                int port = receivePack.getPort();
                 if (receivePack.getData()[0] == 2) {
                     byte[] sendData = new byte[1];
-                    sendData[0] = 1;
-                    DatagramPacket sendPack = new DatagramPacket(sendData, 1, addr, port);
+                    sendData[0] = (byte)(0x01) ;
+                    System.out.println("asdfasdfadsf: " + sendData[0]);
+                    DatagramPacket sendPack = new DatagramPacket(sendData, 1, addr, Configure.SLAVE_PORT);
                     serverSocket.send(sendPack);
                 }
             } catch (IOException e) {

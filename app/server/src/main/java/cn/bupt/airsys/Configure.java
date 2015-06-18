@@ -8,7 +8,7 @@ public interface Configure {
     public static final int DEFAULT_PORT = 8888;
     public static final int DEFAULT_SEND_PORT = 8889;
 
-    public static final int SLAVE_PORT = 8787;
+    public static final int SLAVE_PORT = 12345;
 
     /** JDBC configure */
     public static final String DBMS = "mysql";

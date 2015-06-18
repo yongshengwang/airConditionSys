@@ -89,7 +89,7 @@ public class Server {
                             set.ip = inetAddr;
                             set.start_time = new Timestamp(System.currentTimeMillis());
 
-                            if (servSlaveList.isEmpty() || servSlaveList.size() <= Configure.MAX_SERV_NUM) {
+                            if (servSlaveList.isEmpty() || servSlaveList.size() < Configure.MAX_SERV_NUM) {
                                 s.setCurrStatus(Slave.WORKING);
                                 float tarTemp = SysProperty.getInstance().getInitTemp();
                                 s.setTargetTemp(tarTemp);
