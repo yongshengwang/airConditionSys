@@ -40,10 +40,10 @@ public class UdpServer implements Runnable {
                 serverSocket.receive(receivePack);
                 InetAddress addr = receivePack.getAddress();
                 listener.onReceive(addr.getHostAddress(), receivePack.getData());
-                int port = receivePack.getPort();
-                byte[] sendData = new byte[1]; sendData[0] = 1;
-                DatagramPacket sendPack = new DatagramPacket(sendData, 1, addr, port);
-                serverSocket.send(sendPack);
+                //int port = receivePack.getPort();
+                //byte[] sendData = new byte[1]; sendData[0] = 1;
+                //DatagramPacket sendPack = new DatagramPacket(sendData, 1, addr, port);
+                //serverSocket.send(sendPack);
             } catch (IOException e) {
                 e.printStackTrace();
             }

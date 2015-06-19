@@ -22,8 +22,8 @@ public class MainWindow extends JFrame{
     public MainWindow() throws UnknownHostException {
         panel = new OverViewPanel();
         add(panel);
-        model = new Slave("1", Inet4Address.getLocalHost().getHostAddress());
-        model.setTargetTemp(23);
+        model = new Slave(Configure.ROOM_ID, Inet4Address.getLocalHost().getHostAddress());
+        model.setTargetTemp(Configure.DEFAULT_TARGET_TEMP);
         model.setWorkMode(Slave.COLD_MODE);
         ViewController controller = new ViewController(panel, model);
 
@@ -72,7 +72,6 @@ public class MainWindow extends JFrame{
         }));
 
         serv.start();
-
 
         setSize(400, 200);
         setVisible(true);

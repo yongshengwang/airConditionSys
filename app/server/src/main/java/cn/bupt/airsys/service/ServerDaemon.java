@@ -49,7 +49,6 @@ public class ServerDaemon implements Runnable {
                 if (receivePack.getData()[0] == 2) {
                     byte[] sendData = new byte[1];
                     sendData[0] = (byte)(0x01) ;
-                    System.out.println("asdfasdfadsf: " + sendData[0]);
                     DatagramPacket sendPack = new DatagramPacket(sendData, 1, addr, Configure.SLAVE_PORT);
                     serverSocket.send(sendPack);
                 }

@@ -80,6 +80,9 @@ public class Slave {
             (workMode == HOT_MODE && targetTemp <= 30.0f && targetTemp >= 25.0f)) {
             this.targetTemp = targetTemp;
             return true;
+        } else {
+            // this is very well
+            this.targetTemp = Configure.DEFAULT_TARGET_TEMP;
         }
         return false;
     }

@@ -53,13 +53,11 @@ public class DataSender {
         System.out.println("status send: " + addr + " port: " + port + " temp: " + temp);
         byte[] sendData = new byte[5];
         sendData[0] = (byte)(4 & 0xff);
-        //byte[] _tmp = ByteBuffer.allocate(4).putFloat((Float) temp).array();
         byte[] _tmp = Utility.float2bytes(temp);
         for(int i = 1; i < 5; i++) {
             sendData[i] = _tmp[i-1];
         }
-        System.out.println("send bytes: " + sendData[0] + " " + sendData[1] + " " + sendData[2] + " " + sendData[3] + " " + sendData[4] );
-
+        System.out.println("send stauts bytes: " + sendData[0] + " " + sendData[1] + " " + sendData[2] + " " + sendData[3] + " " + sendData[4] );
         DatagramPacket sendPack = new DatagramPacket(sendData, sendData.length, addr, port);
         serverSocket.send(sendPack);
     }
@@ -74,6 +72,7 @@ public class DataSender {
             sendData[i] = _tmp[i-1];
         }
         sendData[5] = (byte)(power & 0xff);
+         System.out.println("request send: " + sendData[0] + " "+ sendData[1] + " "+ sendData[2] + " "+ sendData[3] + " "+ sendData[4]+ " "+ sendData[5]);
         DatagramPacket sendPack = new DatagramPacket(sendData, sendData.length, addr, port);
         serverSocket.send(sendPack);
     }

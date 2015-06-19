@@ -1,6 +1,5 @@
 package cn.bupt.airsys.client.utils;
 
-import javax.swing.*;
 import java.nio.ByteBuffer;
 
 /**
@@ -8,7 +7,7 @@ import java.nio.ByteBuffer;
  */
 public class Utility {
     public static float byte2float(byte[] bytes) {
-        int asInt = (bytes[0] & 0xFF)
+         int asInt = (bytes[0] & 0xFF)
                 | ((bytes[1] & 0xFF) << 8)
                 | ((bytes[2] & 0xFF) << 16)
                 | ((bytes[3] & 0xFF) << 24);
@@ -17,6 +16,8 @@ public class Utility {
     }
 
     public static byte[] float2bytes(float f) {
+        //byte[] _tmp = ByteBuffer.allocate(4).putFloat(f).array();
+        //return _tmp;
         int intBits = Float.floatToIntBits(f);
         byte[] bytes = new byte[4];
         bytes[0] = (byte) (intBits & 0xff);
