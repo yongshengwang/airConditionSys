@@ -27,52 +27,6 @@ public class MainWindow extends JFrame{
         model.setWorkMode(Slave.COLD_MODE);
         ViewController controller = new ViewController(panel, model);
 
-        final Thread serv = new Thread(new UdpServer(Configure.DEFAULT_RECV_PORT, new ServerListener() {
-            @Override
-            public void onReceive(String inetAddr, byte[] data) {
-                int type = (int)data[0];
-                System.out.println("bytes: " + data[0] + " " + data[1] + " " + data[2] + " " + data[3] + " " + data[4] + " " + data[5]);
-                switch(type) {
-                    case 1: // ack
-                        break;
-
-                    case 6: // 6|mode|pay
-                        model.setWorkMode((int)data[1]);
-                        byte payByte[] = new byte[4];
-                        for (int i = 0; i < 4; i++) {
-                            payByte[i] = data[i + 2];
-                        }
-                        model.setCurrentPay(Utility.byte2float(payByte));
-                        break;
-
-                    case 7: //7|targetTemp|power
-                        byte targetByte[] = new byte[4];
-                        for (int i = 0; i < 4; i++) {
-                            targetByte[i] = data[i + 1];
-                        }
-                        float targetTemp = Utility.byte2float(targetByte);
-                        int power = (int) data[5];
-                        if(power > Slave.PENDING_POWER) {
-                            model.setStatus(Slave.WORKING);
-                        } else {
-                            model.setStatus(Slave.PENDING);
-                        }
-                        model.setTargetTemp(targetTemp);
-                        model.setPower(power);
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-            @Override
-            public void onException(Exception e) {
-                // TODO
-            }
-        }));
-
-        serv.start();
-
         setSize(400, 200);
         setVisible(true);
     }

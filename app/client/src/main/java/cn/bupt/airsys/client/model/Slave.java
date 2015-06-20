@@ -118,7 +118,6 @@ public class Slave {
 
     public void addTempChangeDaemon() {
         new Timer(1000, new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent e) {
                 // code below is not a good way
                 if (workMode == HOT_MODE && currentTemp > 10.0f) {
