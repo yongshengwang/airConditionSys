@@ -1,6 +1,6 @@
 # 分布式温控系统
 
-### 邮电大学软件工程大作业 (2012211313班 C组)
+### 邮电大学软件工程大作
 
 
 ---
@@ -32,7 +32,7 @@
 
 ### 5. Setup
 #### a) 主机
-配置 `app\server\src\main\java\cn\bupt\airsys.Configure.java` 
+配置 `app\server\src\main\java\cn\bupt\airsys.Configure.java`
 ```java
     /** 端口配置 */
     public static final int DEFAULT_PORT = ;
@@ -52,11 +52,11 @@
     public static final int HEARTBEAT_TICK = 1000 * 5; // 5 sec
     /** 最大负载数量控制 */
     public static final int MAX_SERV_NUM = 3;
-    
+
     /** 单位功率花费配置 */
     public static final float PRICE[] = {0.0f, 0.8f * 5 * 0.0001f, 1.0f * 5 * 0.0001f, 1.3f * 5 * 0.0001f};
 ```
-    
+
 #### b) 丛机
 配置 `app\client\src\main\java\cn\bupt\airsys\client\Configure.java`
 
